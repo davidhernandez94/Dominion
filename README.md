@@ -21,8 +21,5 @@ The `AccountPlayer` has login information inside a `.csv` file along with how ma
 * **Comparable:** The players will be in order of when they play (player 1, player 2, etc) and when listed, it will always be this way when ordering players.
 * **Comparator** Card can have multiple ways of being sorted. When in a player's hand, it is random; when given the choice to buy a card, it is by price; when showing the supply, it is by alphabetical order of the name of the cards.
 ### Class and Interface Diagram![IMG_2457](https://github.com/user-attachments/assets/821bfc0b-80a1-4877-85a7-05dba6ecb93d)
-
-
-
 ### Coming Soon
 Deliverable 2 will include the code for the `Supply`, `Trash`, `Player` (with at least one of its subclasses), `Card` (with some of its subclasses but not all), and the very beginning of `Game`. 
