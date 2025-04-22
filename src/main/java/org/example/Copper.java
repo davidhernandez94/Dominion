@@ -7,4 +7,9 @@ public class Copper extends BasicTreasure {
         money = 1;
         startingAmount = 60;
     }
+
+    @Override
+    public Card copy() {
+        return new Copper();
+    }
 }

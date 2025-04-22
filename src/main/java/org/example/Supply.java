@@ -1,9 +1,6 @@
 package org.example;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 public class Supply {
     protected Map<String, Queue<Card>> cards;
@@ -26,7 +23,7 @@ public class Supply {
                 .forEach(card -> {
                     Queue<Card> list = new LinkedList<>();
                     for (int i = 0; i < card.getStartingAmount(); i++) {
-                        // list.add();
+                         list.add(card.copy());
                     }
                     cards.put(card.name, list);
                 });

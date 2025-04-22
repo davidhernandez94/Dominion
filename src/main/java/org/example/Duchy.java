@@ -7,4 +7,9 @@ public class Duchy extends BasicVictory {
         points = 3;
         startingAmount = 12;
     }
+
+    @Override
+    public Card copy() {
+        return new Duchy();
+    }
 }

@@ -7,4 +7,9 @@ public class Province extends BasicVictory {
         points = 6;
         startingAmount = 12;
     }
+
+    @Override
+    public Card copy() {
+        return new Province();
+    }
 }

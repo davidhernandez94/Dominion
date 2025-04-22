@@ -5,4 +5,9 @@ public abstract class BasicVictory extends Card implements Victory {
 
     public BasicVictory() {
     }
+
+    @Override
+    public int getPoints(Game game, Player player) {
+        return points;
+    }
 }

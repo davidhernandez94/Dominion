@@ -7,4 +7,9 @@ public class Gold extends BasicTreasure {
         money = 3;
         startingAmount = 30;
     }
+
+    @Override
+    public Card copy() {
+        return new Gold();
+    }
 }

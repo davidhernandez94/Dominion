@@ -2,7 +2,7 @@ package org.example;
 
 import java.util.*;
 
-public abstract class Player {
+public abstract class Player implements Comparable<Player> {
     protected String name;
     private List<Card> deck = new LinkedList<>();
     private List<Card> hand = new LinkedList<>();
@@ -12,6 +12,7 @@ public abstract class Player {
     private int actions;
     private int buys;
     private int victoryPoints;
+    protected Game game;
 
     public Player(String name) {
         this.name = name;
@@ -19,11 +20,32 @@ public abstract class Player {
 
     public void ActionPhase(Game game) {
         draw(5);
-        System.out.println(hand);
+        actions = 1;
+        buys = 1;
+        money = 0;
+        System.out.println("hand:\n" + hand);
         Scanner sc = new Scanner(System.in);
-        System.out.println("ACTION PHASE");
-        while (actions > 0) {
-
+        System.out.println("ACTION PHASE\n");
+        while (true) {
+            System.out.println("actions: " + actions + "\n");
+            if (actions < 1) {
+                return;
+            }
+            System.out.println("what card would you like to play? (press enter if you want to move on to buy phase) \n");
+            List<Card> actionCards = new ArrayList<>();
+            hand.forEach(card -> {
+                if (card instanceof Action) {
+                    actionCards.add(card);
+                }
+            });
+            Action choice = (Action) input(actionCards);
+            if (choice == null) {
+                return;
+            }
+            hand.remove(choice);
+            inPlay.add((Card) choice);
+            actions--;
+            choice.play(game, this);
         }
     }
 
@@ -36,12 +58,32 @@ public abstract class Player {
         inPlay.clear();
     }
 
-    public int countVictoryPoints() {
-        return 0; // TODO
+    public Card input(List<Card> cards) {
+        Scanner sc = new Scanner(System.in);
+        List<String> strs = new ArrayList<>();
+        cards.forEach(card -> strs.add(card.name));
+        System.out.println("Your choices:\n" + strs + "\nYou choose: ");
+        String result = sc.nextLine();
+        if (result.isEmpty()) {
+            return null;
+        }
+        while (!strs.contains(result)) {
+            System.out.println("Incorrect input, try again: ");
+            result = sc.nextLine();
+        }
+        return cards.get(strs.indexOf(result));
     }
 
-    public String input(List<Card> cards) {
-        return null; // TODO
+    public Card reveal() {
+        return deck.getFirst();
+    }
+
+    public List<Card> reveal(int num) {
+        List<Card> cards = new ArrayList<>();
+        for (int i = 0; i < num; i++) {
+            cards.add(deck.get(i));
+        }
+        return cards;
     }
 
     public void draw(int num) {
@@ -53,6 +95,28 @@ public abstract class Player {
                 draw(1);
             }
         }
+    }
+
+    public void addActions(int num) {
+        actions += num;
+    }
+
+    public void addBuys(int num) {
+        buys += num;
+    }
+
+    public void addMoney(int num) {
+        money += num;
+    }
+
+    public int countVictoryPointsInDeck() {
+        int count = 0;
+        for (Card card : deck) {
+            if (card instanceof Victory victory) {
+                count += victory.getPoints(game, this);
+            }
+        }
+        return count;
     }
 
     public int countActionCardsInHand() {
@@ -85,14 +149,27 @@ public abstract class Player {
         return count;
     }
 
-    public void gain(String cardName, Supply supply) {
+    public void gainToDiscard(String cardName, Supply supply) throws IndexOutOfBoundsException {
+        discard.add(supply.cards.get(cardName).remove());
+    }
 
+    public void gainToHand(String cardName, Supply supply) throws IndexOutOfBoundsException {
+        hand.add(supply.cards.get(cardName).remove());
+    }
+
+    public void gainToTopOfDeck(String cardName, Supply supply) throws IndexOutOfBoundsException {
+        deck.addFirst(supply.cards.get(cardName).remove());
     }
 
     public void shuffleDiscardIntoDeck() {
         deck.addAll(discard);
         discard.clear();
         Collections.shuffle(deck);
+    }
+
+    @Override
+    public int compareTo(Player o) {
+        return this.victoryPoints - o.victoryPoints;
     }
 
     @Override

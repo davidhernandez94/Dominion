@@ -7,4 +7,9 @@ public class Estate extends BasicVictory {
         points = 1;
         startingAmount = 24;
     }
+
+    @Override
+    public Card copy() {
+        return new Estate();
+    }
 }

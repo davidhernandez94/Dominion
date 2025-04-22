@@ -1,5 +1,6 @@
 package org.example;
 
+import java.util.Comparator;
 import java.util.Objects;
 
 public abstract class Card {
@@ -16,6 +17,24 @@ public abstract class Card {
                 "name='" + name + '\'' +
                 ", cost=" + cost +
                 '}';
+    }
+
+    public abstract Card copy();
+
+    public static class CardComparator implements Comparator<Card> {
+        private String type;
+
+        public CardComparator(String type) {
+            this.type = type;
+        }
+
+        @Override
+        public int compare(Card o1, Card o2) {
+            return switch (type) {
+                case "cost" -> o1.cost - o2.cost;
+                case null, default -> o1.name.compareTo(o2.name);
+            };
+        }
     }
 
     @Override
