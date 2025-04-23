@@ -13,10 +13,7 @@ public abstract class Card {
 
     @Override
     public String toString() {
-        return "Card{" +
-                "name='" + name + '\'' +
-                ", cost=" + cost +
-                '}';
+        return name;
     }
 
     public abstract Card copy();

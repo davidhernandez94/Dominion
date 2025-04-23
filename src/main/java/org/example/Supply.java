@@ -3,7 +3,11 @@ package org.example;
 import java.util.*;
 
 public class Supply {
-    protected Map<String, Queue<Card>> cards;
+    protected Map<String, Queue<Card>> cards = new HashMap<>();
+
+    public Supply() {
+        this(new LinkedList<>());
+    }
 
     public Supply(Map<String, Queue<Card>> cards) {
         this.cards = cards;
@@ -25,7 +29,7 @@ public class Supply {
                     for (int i = 0; i < card.getStartingAmount(); i++) {
                          list.add(card.copy());
                     }
-                    cards.put(card.name, list);
+                    cards.putIfAbsent(card.name, list);
                 });
     }
 

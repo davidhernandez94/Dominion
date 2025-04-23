@@ -14,8 +14,9 @@ public abstract class Player implements Comparable<Player> {
     private int victoryPoints;
     protected Game game;
 
-    public Player(String name) {
+    public Player(String name, Game game) {
         this.name = name;
+        this.game = game;
     }
 
     public void ActionPhase(Game game) {
@@ -23,15 +24,14 @@ public abstract class Player implements Comparable<Player> {
         actions = 1;
         buys = 1;
         money = 0;
-        System.out.println("hand:\n" + hand);
-        Scanner sc = new Scanner(System.in);
-        System.out.println("ACTION PHASE\n");
+        System.out.println("ACTION PHASE");
         while (true) {
-            System.out.println("actions: " + actions + "\n");
+            System.out.println("hand:\n" + hand);
+            System.out.println("actions: " + actions);
             if (actions < 1) {
                 return;
             }
-            System.out.println("what card would you like to play? (press enter if you want to move on to buy phase) \n");
+            System.out.println("what card would you like to play? (press enter if you want to end action phase)");
             List<Card> actionCards = new ArrayList<>();
             hand.forEach(card -> {
                 if (card instanceof Action) {
@@ -50,7 +50,33 @@ public abstract class Player implements Comparable<Player> {
     }
 
     public void BuyPhase(Game game) {
-        // TODO
+        System.out.println("\nBUY PHASE");
+        while (true) {
+            System.out.println("buys: " + buys);
+            if (buys < 1) {
+                return;
+            }
+            System.out.println("what card would you like to buy? (press enter if you want end buy phase)");
+            List<Card> actionCards = new ArrayList<>();
+            hand.forEach(card -> {
+                if (card instanceof Treasure) {
+                    ((Treasure) card).pay(game, this);
+                }
+            });
+            List<Card> treasureCards = new ArrayList<>();
+            for (Queue<Card> list : game.supply.cards.values()) {
+                if (!list.isEmpty() && list.peek().cost <= money) {
+                    treasureCards.add(list.peek());
+                }
+            }
+            treasureCards.sort(new Card.CardComparator("cost"));
+            Card choice = input(treasureCards);
+            if (choice == null) {
+                return;
+            }
+            buys--;
+            gainToDiscard(choice.name, game.supply);
+        }
     }
 
     public void pickUp() {
@@ -59,17 +85,17 @@ public abstract class Player implements Comparable<Player> {
     }
 
     public Card input(List<Card> cards) {
-        Scanner sc = new Scanner(System.in);
         List<String> strs = new ArrayList<>();
         cards.forEach(card -> strs.add(card.name));
         System.out.println("Your choices:\n" + strs + "\nYou choose: ");
-        String result = sc.nextLine();
+        String result = game.sc.nextLine();
         if (result.isEmpty()) {
             return null;
         }
         while (!strs.contains(result)) {
             System.out.println("Incorrect input, try again: ");
-            result = sc.nextLine();
+            game.sc.nextLine();
+            result = game.sc.nextLine();
         }
         return cards.get(strs.indexOf(result));
     }
@@ -151,6 +177,12 @@ public abstract class Player implements Comparable<Player> {
 
     public void gainToDiscard(String cardName, Supply supply) throws IndexOutOfBoundsException {
         discard.add(supply.cards.get(cardName).remove());
+    }
+
+    public void gainToDiscard(int num, String cardName, Supply supply) throws IndexOutOfBoundsException {
+        for (int i = 0; i < num; i++) {
+            discard.add(supply.cards.get(cardName).remove());
+        }
     }
 
     public void gainToHand(String cardName, Supply supply) throws IndexOutOfBoundsException {
