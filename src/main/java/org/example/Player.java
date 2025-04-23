@@ -31,14 +31,14 @@ public abstract class Player implements Comparable<Player> {
             if (actions < 1) {
                 return;
             }
-            System.out.println("what card would you like to play? (press enter if you want to end action phase)");
+            System.out.println("what card would you like to play? (press a letter and enter if you want to end action phase)");
             List<Card> actionCards = new ArrayList<>();
             hand.forEach(card -> {
                 if (card instanceof Action) {
                     actionCards.add(card);
                 }
             });
-            Action choice = (Action) input(actionCards);
+            Action choice = (Action) inputCards(actionCards);
             if (choice == null) {
                 return;
             }
@@ -52,11 +52,12 @@ public abstract class Player implements Comparable<Player> {
     public void BuyPhase(Game game) {
         System.out.println("\nBUY PHASE");
         while (true) {
+            System.out.println("money: " + money);
             System.out.println("buys: " + buys);
             if (buys < 1) {
                 return;
             }
-            System.out.println("what card would you like to buy? (press enter if you want end buy phase)");
+            System.out.println("what card would you like to buy? (press a letter and enter if you want end buy phase)");
             List<Card> actionCards = new ArrayList<>();
             hand.forEach(card -> {
                 if (card instanceof Treasure) {
@@ -70,7 +71,7 @@ public abstract class Player implements Comparable<Player> {
                 }
             }
             treasureCards.sort(new Card.CardComparator("cost"));
-            Card choice = input(treasureCards);
+            Card choice = inputCards(treasureCards);
             if (choice == null) {
                 return;
             }
@@ -81,20 +82,21 @@ public abstract class Player implements Comparable<Player> {
 
     public void pickUp() {
         discard.addAll(inPlay);
+        discard.addAll(hand);
         inPlay.clear();
+        hand.clear();
     }
 
-    public Card input(List<Card> cards) {
+    public Card inputCards(List<Card> cards) {
         List<String> strs = new ArrayList<>();
         cards.forEach(card -> strs.add(card.name));
-        System.out.println("Your choices:\n" + strs + "\nYou choose: ");
+        System.out.println("Your choices: " + strs + "\nYou choose: ");
         String result = game.sc.nextLine();
-        if (result.isEmpty()) {
-            return null;
-        }
         while (!strs.contains(result)) {
+            if (result.length() == 1) {
+                return null;
+            }
             System.out.println("Incorrect input, try again: ");
-            game.sc.nextLine();
             result = game.sc.nextLine();
         }
         return cards.get(strs.indexOf(result));

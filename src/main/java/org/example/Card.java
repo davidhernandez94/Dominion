@@ -28,7 +28,7 @@ public abstract class Card {
         @Override
         public int compare(Card o1, Card o2) {
             return switch (type) {
-                case "cost" -> o1.cost - o2.cost;
+                case "cost" -> o2.cost - o1.cost;
                 case null, default -> o1.name.compareTo(o2.name);
             };
         }
