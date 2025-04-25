@@ -10,4 +10,9 @@ public abstract class BasicTreasure extends Card implements Treasure {
     public void pay(Game game, Player player) {
         player.setMoney(player.getMoney() + money);
     }
+
+    @Override
+    public String description() {
+        return "treasure: " + money + "$";
+    }
 }

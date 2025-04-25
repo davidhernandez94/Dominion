@@ -20,10 +20,6 @@ public abstract class Player implements Comparable<Player> {
     }
 
     public void ActionPhase(Game game) {
-        draw(5);
-        actions = 1;
-        buys = 1;
-        money = 0;
         System.out.println("ACTION PHASE");
         while (true) {
             System.out.println("hand:\n" + hand);
@@ -52,6 +48,11 @@ public abstract class Player implements Comparable<Player> {
     public void BuyPhase(Game game) {
         System.out.println("\nBUY PHASE");
         while (true) {
+            hand.forEach(card -> {
+                if (card instanceof Treasure) {
+                    ((Treasure) card).pay(game, this);
+                }
+            });
             System.out.println("money: " + money);
             System.out.println("buys: " + buys);
             if (buys < 1) {
@@ -59,11 +60,6 @@ public abstract class Player implements Comparable<Player> {
             }
             System.out.println("what card would you like to buy? (press a letter and enter if you want end buy phase)");
             List<Card> actionCards = new ArrayList<>();
-            hand.forEach(card -> {
-                if (card instanceof Treasure) {
-                    ((Treasure) card).pay(game, this);
-                }
-            });
             List<Card> treasureCards = new ArrayList<>();
             for (Queue<Card> list : game.supply.cards.values()) {
                 if (!list.isEmpty() && list.peek().cost <= money) {
@@ -85,6 +81,10 @@ public abstract class Player implements Comparable<Player> {
         discard.addAll(hand);
         inPlay.clear();
         hand.clear();
+        draw(5);
+        actions = 1;
+        buys = 1;
+        money = 0;
     }
 
     public Card inputCards(List<Card> cards) {
@@ -137,14 +137,16 @@ public abstract class Player implements Comparable<Player> {
         money += num;
     }
 
-    public int countVictoryPointsInDeck() {
+    public void countVictoryPointsInDeck() {
         int count = 0;
         for (Card card : deck) {
             if (card instanceof Victory victory) {
                 count += victory.getPoints(game, this);
+            } else if (card instanceof Curse) {
+                count--;
             }
         }
-        return count;
+        victoryPoints = count;
     }
 
     public int countActionCardsInHand() {
