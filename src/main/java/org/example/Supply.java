@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.basicCards.*;
+
 import java.util.*;
 
 public class Supply {

@@ -13,12 +13,17 @@ public abstract class Card {
 
     public abstract String description();
 
+    /**
+     * creates a copy of this
+     * @return a new card of the same type
+     */
     public abstract Card copy();
 
     @Override
     public String toString() {
         return name;
     }
+
     public static class CardComparator implements Comparator<Card> {
 
         private String type;
@@ -26,6 +31,13 @@ public abstract class Card {
         public CardComparator(String type) {
             this.type = type;
         }
+
+        /**
+         * compares cards based on their cost or their name, according to type
+         * @param o1 the first object to be compared.
+         * @param o2 the second object to be compared.
+         * @return negative int if o1 should go before o2
+         */
         @Override
         public int compare(Card o1, Card o2) {
             return switch (type) {

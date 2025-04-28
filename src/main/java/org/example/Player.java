@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.basicCards.Curse;
+
 import java.util.*;
 
 public abstract class Player implements Comparable<Player> {
@@ -19,6 +21,10 @@ public abstract class Player implements Comparable<Player> {
         this.game = game;
     }
 
+    /**
+     * player can play only one action card from their hand (unless they gain actions during their turn)
+     * @param game current game
+     */
     public void ActionPhase(Game game) {
         System.out.println("ACTION PHASE");
         while (true) {
@@ -45,6 +51,10 @@ public abstract class Player implements Comparable<Player> {
         }
     }
 
+    /**
+     * player can buy only one card from the supply (unless they gain buys during their turn)
+     * @param game current game
+     */
     public void BuyPhase(Game game) {
         System.out.println("\nBUY PHASE");
         while (true) {
@@ -76,6 +86,9 @@ public abstract class Player implements Comparable<Player> {
         }
     }
 
+    /**
+     * all cards from player's hand and inPlay go in their discard they draw a new hand
+     */
     public void pickUp() {
         discard.addAll(inPlay);
         discard.addAll(hand);
@@ -87,6 +100,11 @@ public abstract class Player implements Comparable<Player> {
         money = 0;
     }
 
+    /**
+     * allows player to choose a card from a list of cards through the terminal
+     * @param cards list of cards to choose from
+     * @return chosen card
+     */
     public Card inputCards(List<Card> cards) {
         List<String> strs = new ArrayList<>();
         cards.forEach(card -> strs.add(card.name));
@@ -102,10 +120,19 @@ public abstract class Player implements Comparable<Player> {
         return cards.get(strs.indexOf(result));
     }
 
+    /**
+     * reveals the top card of player's deck
+     * @return revealed card
+     */
     public Card reveal() {
         return deck.getFirst();
     }
 
+    /**
+     * reveals the top num cards of a player's deck
+     * @param num number of cards to be revealed
+     * @return list of revealed cards
+     */
     public List<Card> reveal(int num) {
         List<Card> cards = new ArrayList<>();
         for (int i = 0; i < num; i++) {
@@ -114,6 +141,10 @@ public abstract class Player implements Comparable<Player> {
         return cards;
     }
 
+    /**
+     * draws cards from top of deck into hand
+     * @param num amount of cards to be drawn
+     */
     public void draw(int num) {
         for (int i = 0; i < num; i++) {
             if (!deck.isEmpty()) {
@@ -125,18 +156,34 @@ public abstract class Player implements Comparable<Player> {
         }
     }
 
+    /**
+     * increases player's actions
+     * @param num how many to be increased by
+     */
     public void addActions(int num) {
         actions += num;
     }
 
+    /**
+     * increases player's buys
+     * @param num how many to be increased by
+     */
     public void addBuys(int num) {
         buys += num;
     }
 
+    /**
+     * increases player's money
+     * @param num how many to be increased by
+     */
     public void addMoney(int num) {
         money += num;
     }
 
+    /**
+     * counts how many victory points player has in deck
+     * based on victory cards and curses
+     */
     public void countVictoryPointsInDeck() {
         int count = 0;
         for (Card card : deck) {
@@ -149,6 +196,10 @@ public abstract class Player implements Comparable<Player> {
         victoryPoints = count;
     }
 
+    /**
+     * counts how many action cards are in player's hand
+     * @return how many there are
+     */
     public int countActionCardsInHand() {
         int count = 0;
         for (Card card : hand) {
@@ -159,6 +210,10 @@ public abstract class Player implements Comparable<Player> {
         return count;
     }
 
+    /**
+     * counts how many treasure cards are in player's hand
+     * @return how many there are
+     */
     public int countTreasuresInHand() {
         int count = 0;
         for (Card card : hand) {
@@ -169,6 +224,10 @@ public abstract class Player implements Comparable<Player> {
         return count;
     }
 
+    /**
+     * counts how many victory cards are in player's hand
+     * @return how many there are
+     */
     public int countVictoryCardsInHand() {
         int count = 0;
         for (Card card : hand) {
@@ -179,21 +238,42 @@ public abstract class Player implements Comparable<Player> {
         return count;
     }
 
-    public void gainToDiscard(String cardName, Supply supply) throws IndexOutOfBoundsException {
+    /**
+     * gains card from supply to player's discard
+     * @param cardName name of added card
+     * @param supply supply of the game
+     * @return whether the card was added or not
+     */
+    public boolean gainToDiscard(String cardName, Supply supply) {
+        if (supply.cards.get(cardName).isEmpty()) {
+            return false;
+        }
         discard.add(supply.cards.get(cardName).remove());
+        return true;
     }
 
-    public void gainToDiscard(int num, String cardName, Supply supply) throws IndexOutOfBoundsException {
+    /**
+     * gains multiple cards from supply to discard
+     * @param num number of cards to be added
+     * @param cardName name of card to be added
+     * @param supply supply of game
+     * @return
+     */
+    public boolean gainToDiscard(int num, String cardName, Supply supply) {
+        if (supply.cards.get(cardName).isEmpty()) {
+            return false;
+        }
         for (int i = 0; i < num; i++) {
             discard.add(supply.cards.get(cardName).remove());
         }
+        return true;
     }
 
-    public void gainToHand(String cardName, Supply supply) throws IndexOutOfBoundsException {
+    public boolean gainToHand(String cardName, Supply supply) {
         hand.add(supply.cards.get(cardName).remove());
     }
 
-    public void gainToTopOfDeck(String cardName, Supply supply) throws IndexOutOfBoundsException {
+    public boolean gainToTopOfDeck(String cardName, Supply supply) {
         deck.addFirst(supply.cards.get(cardName).remove());
     }
 
@@ -223,7 +303,7 @@ public abstract class Player implements Comparable<Player> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, deck, hand, discard, inPlay, money, actions, buys, victoryPoints);
+        return Objects.hash(name, deck, hand, discard, inPlay, (Object) money, (Object) actions, (Object) buys, (Object) victoryPoints);
     }
 
     public String getName() {

@@ -9,6 +9,12 @@ public class Game {
     protected Scanner sc = new Scanner(System.in);
     private static List<AccountPlayer> accountPlayers = new ArrayList<>();
 
+    /**
+     * game initialisation:
+     * through the terminal, chooses the amount of players, their names
+     * logs in the players with accounts
+     * gives each player their starting deck
+     */
     public void start() {
         System.out.println("how many players? (1-6)");
         int numOfPlayers = sc.nextInt();
@@ -18,6 +24,9 @@ public class Game {
             numOfPlayers = sc.nextInt();
             sc.nextLine();
         }
+
+        //TODO log in account players
+
         for (int i = 0; i < numOfPlayers; i++) {
             System.out.println("player " + (i + 1) + "'s name: ");
             String name = sc.nextLine();
@@ -32,6 +41,12 @@ public class Game {
         run();
     }
 
+    /**
+     * game loop:
+     * each player rotates through their action phase, buy phase, and pick up
+     * until one of two conditions is met: either three supply piles are empty
+     * or the province pile is empty
+     */
     public void run() {
         while (true) {
             for (Player player : players) {
@@ -53,6 +68,10 @@ public class Game {
         }
     }
 
+    /**
+     * end of the game: victory points are counted and winner is determined.
+     * Players with accounts are updated in the accounts.csv file
+     */
     public void end() {
         for (Player player : players) {
             player.getDeck().addAll(player.getDiscard());

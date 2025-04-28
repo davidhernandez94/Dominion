@@ -1,4 +1,6 @@
-package org.example;
+package org.example.basicCards;
+
+import org.example.Card;
 
 public class Curse extends Card {
     public Curse() {

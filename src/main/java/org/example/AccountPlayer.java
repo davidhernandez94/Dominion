@@ -29,10 +29,13 @@ public class AccountPlayer extends Player {
         this.gamesLost = gamesLost;
     }
 
+    /**
+     * allows account player to log in to their account through the terminal by reading the accounts.csv file.
+     */
     public void login() {
         Scanner sc = new Scanner(System.in);
         File file = new File("src/main/resources/accounts.csv");
-        Map<String, String> accounts = getAccounts();
+        Map<String, AccountPlayer> accounts = getAccounts();
         System.out.println("enter username: ");
         String username = sc.nextLine();
         while (!accounts.containsKey(username)) {
@@ -41,12 +44,17 @@ public class AccountPlayer extends Player {
         }
         System.out.println("enter your password:");
         String password = sc.nextLine();
-        while (!password.equals(accounts.get(username))) {
+        while (!password.equals(accounts.get(username).getPassword())) {
             System.out.println("incorrect password, try again: ");
             password = sc.nextLine();
         }
     }
 
+    /**
+     * creates new username through the terminal
+     * username must contain only letters and numbers and must be at least 8 characters long
+     * @return new username
+     */
     public String makeUsername() {
         Scanner sc = new Scanner(System.in);
         System.out.println("enter your new username: (must contain only letters and numbers, no spaces, at least 8 characters) ");
@@ -62,6 +70,11 @@ public class AccountPlayer extends Player {
         return username;
     }
 
+    /**
+     * creates new password through the terminal
+     * password must contain only letters and numbers and must be at least 8 characters long
+     * @return new password
+     */
     public String makePassword() {
         Scanner sc = new Scanner(System.in);
         System.out.println("enter your new password: (must contain only letters and numbers, no spaces, at least 8 characters) ");
@@ -73,23 +86,38 @@ public class AccountPlayer extends Player {
         return password;
     }
 
+    /**
+     * writes account player information to the accounts.csv file
+     * format: username,password,games won,games lost
+     */
     public void exportPlayer() {
         File file = new File("src/main/resources/accounts.csv");
         try (FileWriter fw = new FileWriter(file, true)) {
-            fw.append(this.userName + "," + this.password + "\n");
+            fw.append(this.userName + "," + this.password + "," + this.gamesWon + "," + this.gamesLost + "\n");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public Map<String, String> getAccounts() {
-        Map<String, String> result = new HashMap<>();
+    /**
+     * gets all accounts in the csv file and puts them in a map
+     * @return a map where the key is a string username and the value is a string password
+     */
+    public Map<String, AccountPlayer> getAccounts() {
+        Map<String, AccountPlayer> result = new HashMap<>();
         File file = new File("src/main/resources/accounts.csv");
         Scanner sysScanner = new Scanner(System.in);
         try (Scanner csvScanner = new Scanner(file)) {
             while (csvScanner.hasNext()) {
                 String[] line = csvScanner.nextLine().split(",");
-                result.putIfAbsent(line[0], line[1]);
+                String name = null;
+                Game game = null;
+                String username = line[0];
+                String password = line[1];
+                int gamesWon = Integer.parseInt(line[2]);
+                int gamesLost = Integer.parseInt(line[3]);
+                AccountPlayer accountPlayer = new AccountPlayer(name, game, username, password, gamesWon, gamesLost);
+                result.putIfAbsent(username, accountPlayer);
             }
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
@@ -107,7 +135,7 @@ public class AccountPlayer extends Player {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), userName, password, gamesWon, gamesLost);
+        return Objects.hash((Object) super.hashCode(), userName, password, (Object) gamesWon, (Object) gamesLost);
     }
 
     private String getUserName() {

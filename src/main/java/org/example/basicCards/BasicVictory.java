@@ -1,4 +1,9 @@
-package org.example;
+package org.example.basicCards;
+
+import org.example.Card;
+import org.example.Game;
+import org.example.Player;
+import org.example.Victory;
 
 public abstract class BasicVictory extends Card implements Victory {
     protected int points;
