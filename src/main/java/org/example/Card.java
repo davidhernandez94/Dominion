@@ -57,7 +57,7 @@ public abstract class Card {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, cost, startingAmount);
+        return Objects.hash(name, (Object) cost, (Object) startingAmount);
     }
 
     public String getName() {

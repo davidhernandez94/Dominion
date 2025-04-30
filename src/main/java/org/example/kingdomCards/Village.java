@@ -1,4 +1,4 @@
-package org.example.actionCards;
+package org.example.kingdomCards;
 
 import org.example.Action;
 import org.example.Card;

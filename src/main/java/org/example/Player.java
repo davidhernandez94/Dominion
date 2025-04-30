@@ -16,6 +16,10 @@ public abstract class Player implements Comparable<Player> {
     private int victoryPoints;
     protected Game game;
 
+    public Player(String name) {
+        this.name = name;
+    }
+
     public Player(String name, Game game) {
         this.name = name;
         this.game = game;
@@ -60,7 +64,7 @@ public abstract class Player implements Comparable<Player> {
         while (true) {
             hand.forEach(card -> {
                 if (card instanceof Treasure) {
-                    ((Treasure) card).pay(game, this);
+                    money += ((Treasure) card).pay(game, this);
                 }
             });
             System.out.println("money: " + money);
@@ -125,6 +129,9 @@ public abstract class Player implements Comparable<Player> {
      * @return revealed card
      */
     public Card reveal() {
+        if (deck.isEmpty()) {
+            shuffleDiscardIntoDeck();
+        }
         return deck.getFirst();
     }
 
@@ -136,6 +143,9 @@ public abstract class Player implements Comparable<Player> {
     public List<Card> reveal(int num) {
         List<Card> cards = new ArrayList<>();
         for (int i = 0; i < num; i++) {
+            if (deck.size() <= i) {
+                shuffleDiscardIntoDeck();
+            }
             cards.add(deck.get(i));
         }
         return cards;
@@ -147,12 +157,10 @@ public abstract class Player implements Comparable<Player> {
      */
     public void draw(int num) {
         for (int i = 0; i < num; i++) {
-            if (!deck.isEmpty()) {
-                hand.add(deck.removeFirst());
-            } else {
+            if (deck.isEmpty()) {
                 shuffleDiscardIntoDeck();
-                draw(1);
             }
+            hand.add(deck.removeFirst());
         }
     }
 
@@ -257,10 +265,10 @@ public abstract class Player implements Comparable<Player> {
      * @param num number of cards to be added
      * @param cardName name of card to be added
      * @param supply supply of game
-     * @return
+     * @return whether the operation was successful
      */
     public boolean gainToDiscard(int num, String cardName, Supply supply) {
-        if (supply.cards.get(cardName).isEmpty()) {
+        if (supply.cards.get(cardName).size() < num) {
             return false;
         }
         for (int i = 0; i < num; i++) {
@@ -269,18 +277,58 @@ public abstract class Player implements Comparable<Player> {
         return true;
     }
 
+    /**
+     * gains multiple cards from supply to hand
+     * @param cardName name of card to be added
+     * @param supply supply of game
+     * @return whether the operation was successful
+     */
     public boolean gainToHand(String cardName, Supply supply) {
+        if (supply.cards.get(cardName).isEmpty()) {
+            return false;
+        }
         hand.add(supply.cards.get(cardName).remove());
+        return true;
     }
 
+    /**
+     * gains multiple cards from supply to hand
+     * @param num number of cards to be added
+     * @param cardName name of card to be added
+     * @param supply supply of game
+     * @return whether the operation was successful
+     */
+    public boolean gainToHand(String cardName, Supply supply, int num) {
+        if (supply.cards.get(cardName).size() < num) {
+            return false;
+        }
+        for (int i = 0; i < num; i++) {
+            gainToHand(cardName, supply);
+        }
+        return true;
+    }
+
+    /**
+     * gains card to top of deck
+     * @param cardName name of card
+     * @param supply supply of game
+     * @return whether the operation was successful
+     */
     public boolean gainToTopOfDeck(String cardName, Supply supply) {
+        if (supply.cards.get(cardName).isEmpty()) {
+            return false;
+        }
         deck.addFirst(supply.cards.get(cardName).remove());
+        return true;
     }
 
+    /**
+     * when deck is empty, randomly mixes discard and puts them in deck
+     */
     public void shuffleDiscardIntoDeck() {
+        Collections.shuffle(discard);
         deck.addAll(discard);
         discard.clear();
-        Collections.shuffle(deck);
     }
 
     @Override

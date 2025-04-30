@@ -1,31 +1,33 @@
-package org.example.actionCards;
+package org.example.kingdomCards;
 
 import org.example.Action;
 import org.example.Card;
 import org.example.Game;
 import org.example.Player;
 
-public class Laboratory extends Card implements Action {
-    public Laboratory() {
+public class Market extends Card implements Action {
+    public Market() {
         cost = 5;
-        name = "laboratory";
+        name = "market";
         startingAmount = 10;
     }
 
     @Override
     public Card copy() {
-        return new Laboratory();
+        return new Market();
     }
 
     @Override
     public String description() {
-        return "action:\n+2 cards\n+1 action";
+        return "action:\n+1 card\n+1 action\n+1 buy\n+1 buy";
     }
 
     @Override
     public void play(Game game, Player player) {
         System.out.println(description());
-        player.draw(2);
+        player.draw(1);
         player.addActions(1);
+        player.addBuys(1);
+        player.addMoney(1);
     }
 }

@@ -1,7 +1,10 @@
 package org.example;
 
-import java.util.List;
-
 public interface Treasure {
-    void pay(Game game, Player player);
+    /**
+     * adds to player's money a certain amount (see card description)
+     * @param game game where this is played
+     * @param player player who plays the card
+     */
+    int pay(Game game, Player player);
 }

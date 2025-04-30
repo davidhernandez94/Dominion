@@ -95,4 +95,44 @@ public class Game {
             }
         }
     }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
+    }
+
+    public List<Card> getTrash() {
+        return trash;
+    }
+
+    public void setTrash(List<Card> trash) {
+        this.trash = trash;
+    }
+
+    public Supply getSupply() {
+        return supply;
+    }
+
+    public void setSupply(Supply supply) {
+        this.supply = supply;
+    }
+
+    public Scanner getSc() {
+        return sc;
+    }
+
+    public void setSc(Scanner sc) {
+        this.sc = sc;
+    }
+
+    public static List<AccountPlayer> getAccountPlayers() {
+        return accountPlayers;
+    }
+
+    public static void setAccountPlayers(List<AccountPlayer> accountPlayers) {
+        Game.accountPlayers = accountPlayers;
+    }
 }
