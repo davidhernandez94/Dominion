@@ -24,11 +24,8 @@ public class Game {
             numOfPlayers = sc.nextInt();
             sc.nextLine();
         }
-
-        //TODO log in account players
-
         for (int i = 0; i < numOfPlayers; i++) {
-            System.out.println("player " + (i + 1) + "'s name: ");
+                    System.out.println("player " + (i + 1) + "'s name: ");
             String name = sc.nextLine();
             players.add(new GuestPlayer(name, this));
             players.get(i).gainToDiscard(7, "copper", supply);

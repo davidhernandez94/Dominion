@@ -1,5 +1,4 @@
 import org.example.AccountPlayer;
-import org.example.Player;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +12,7 @@ public class AccountPlayerTest {
     @Test
     void testGetAccounts() {
         File file = new File("src/main/resources/accounts.csv");
-        try (FileWriter fw = new FileWriter(file)) {
+        try (FileWriter fw = new FileWriter(file, true)) {
             fw.append("baba,hello,1,4\n");
             fw.append("abc,password,3,9\n");
         } catch (IOException e) {
@@ -33,7 +32,11 @@ public class AccountPlayerTest {
         AccountPlayer player = new AccountPlayer(null, null, "awa", "h", 5, 2);
         player.exportPlayer();
         try (Scanner sc = new Scanner(file)) {
-            String[] line = sc.nextLine().split(",");
+            String lastLine = "";
+            while (sc.hasNext()) {
+                lastLine = sc.nextLine();
+            }
+            String[] line = lastLine.split(",");
             String[] expected = {"awa", "h", "5", "2"};
             Assertions.assertEquals(Arrays.toString(line), Arrays.toString(expected));
         } catch (FileNotFoundException e) {
