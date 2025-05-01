@@ -13,6 +13,15 @@ public class Market extends Card implements Action {
     }
 
     @Override
+    public void play(Game game, Player player) {
+        System.out.println(description());
+        player.draw(1);
+        player.addActions(1);
+        player.addBuys(1);
+        player.addMoney(1);
+    }
+
+    @Override
     public Card copy() {
         return new Market();
     }
@@ -20,14 +29,5 @@ public class Market extends Card implements Action {
     @Override
     public String description() {
         return "action:\n+1 card\n+1 action\n+1 buy\n+1 buy";
-    }
-
-    @Override
-    public void play(Game game, Player player) {
-        System.out.println(description());
-        player.draw(1);
-        player.addActions(1);
-        player.addBuys(1);
-        player.addMoney(1);
     }
 }

@@ -24,7 +24,7 @@ public class Supply {
      * @param startingCards original starting cards (cards that are in kingdomCards package)
      * @return map where key is name of card and value is queue of cards with that name
      */
-    public Map<String, Queue<Card>> makeSupply(List<Card> startingCards) {
+    public static Map<String, Queue<Card>> makeSupply(List<Card> startingCards) {
         Map<String, Queue<Card>> supply = new HashMap<>();
         Queue<Card> base = new LinkedList<>();
         base.add(new Copper());

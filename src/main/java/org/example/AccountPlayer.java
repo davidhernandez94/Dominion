@@ -12,6 +12,10 @@ public class AccountPlayer extends Player {
     private int gamesWon;
     private int gamesLost;
 
+    public AccountPlayer(String name) {
+        super(name);
+    }
+
     public AccountPlayer(String name, Game game) {
         super(name, game);
         userName = makeUsername();

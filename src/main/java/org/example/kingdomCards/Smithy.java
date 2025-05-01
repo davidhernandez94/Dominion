@@ -13,6 +13,12 @@ public class Smithy extends Card implements Action {
     }
 
     @Override
+    public void play(Game game, Player player) {
+        System.out.println(description());
+        player.draw(3);
+    }
+
+    @Override
     public Card copy() {
         return new Smithy();
     }
@@ -20,10 +26,5 @@ public class Smithy extends Card implements Action {
     @Override
     public String description() {
         return "action:\n+3 cards\ncost: 4";
-    }
-
-    @Override
-    public void play(Game game, Player player) {
-        System.out.println(description());
     }
 }

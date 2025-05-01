@@ -13,6 +13,13 @@ public class Laboratory extends Card implements Action {
     }
 
     @Override
+    public void play(Game game, Player player) {
+        System.out.println(description());
+        player.draw(2);
+        player.addActions(1);
+    }
+
+    @Override
     public Card copy() {
         return new Laboratory();
     }
@@ -20,12 +27,5 @@ public class Laboratory extends Card implements Action {
     @Override
     public String description() {
         return "action:\n+2 cards\n+1 action";
-    }
-
-    @Override
-    public void play(Game game, Player player) {
-        System.out.println(description());
-        player.draw(2);
-        player.addActions(1);
     }
 }
