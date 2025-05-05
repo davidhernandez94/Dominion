@@ -107,20 +107,18 @@ public class AccountPlayer extends Player {
      * gets all accounts in the csv file and puts them in a map
      * @return a map where the key is a string username and the value is a string password
      */
-    public Map<String, AccountPlayer> getAccounts() {
+    public static Map<String, AccountPlayer> getAccounts() {
         Map<String, AccountPlayer> result = new HashMap<>();
         File file = new File("src/main/resources/accounts.csv");
         Scanner sysScanner = new Scanner(System.in);
         try (Scanner csvScanner = new Scanner(file)) {
             while (csvScanner.hasNext()) {
                 String[] line = csvScanner.nextLine().split(",");
-                String name = null;
-                Game game = null;
                 String username = line[0];
                 String password = line[1];
                 int gamesWon = Integer.parseInt(line[2]);
                 int gamesLost = Integer.parseInt(line[3]);
-                AccountPlayer accountPlayer = new AccountPlayer(name, game, username, password, gamesWon, gamesLost);
+                AccountPlayer accountPlayer = new AccountPlayer(null, null, username, password, gamesWon, gamesLost);
                 result.putIfAbsent(username, accountPlayer);
             }
         } catch (FileNotFoundException e) {
@@ -142,7 +140,7 @@ public class AccountPlayer extends Player {
         return Objects.hash((Object) super.hashCode(), userName, password, (Object) gamesWon, (Object) gamesLost);
     }
 
-    private String getUserName() {
+    public String getUserName() {
         return userName;
     }
 

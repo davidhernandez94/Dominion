@@ -85,6 +85,7 @@ public abstract class Player implements Comparable<Player> {
             if (choice == null) {
                 return;
             }
+            money -= choice.cost;
             buys--;
             gainToDiscard(choice.name, game.supply);
         }
@@ -92,6 +93,7 @@ public abstract class Player implements Comparable<Player> {
 
     /**
      * all cards from player's hand and inPlay go in their discard they draw a new hand
+     * their settings for actions, buys, and money reset for their next turn
      */
     public void pickUp() {
         discard.addAll(inPlay);

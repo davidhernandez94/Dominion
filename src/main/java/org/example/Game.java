@@ -1,5 +1,8 @@
 package org.example;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 public class Game {
@@ -7,7 +10,7 @@ public class Game {
     protected List<Card> trash = new ArrayList<>();
     protected Supply supply = new Supply();
     protected Scanner sc = new Scanner(System.in);
-    private static List<AccountPlayer> accountPlayers = new ArrayList<>();
+    private static Map<String, AccountPlayer> accountPlayers = AccountPlayer.getAccounts();
 
     /**
      * game initialisation:
@@ -60,6 +63,7 @@ public class Game {
                 if (supply.cards.get("province").isEmpty() || emptyPiles >= 3) {
                     System.out.println("GAME IS DONE");
                     end();
+                    break;
                 }
             }
         }
@@ -81,6 +85,16 @@ public class Game {
         }
         Collections.sort(players);
         System.out.println("Winner: " + players.getFirst());
+        File file = new File("src/main/resources/accounts.csv");
+
+        // empty the file
+        try (FileWriter fw = new FileWriter(file)) {
+            fw.write("");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // update stats of accountPlayer's
         for (Player player : players) {
             if (player instanceof AccountPlayer accountPlayer) {
                 if (players.getFirst() == accountPlayer) {
@@ -88,7 +102,9 @@ public class Game {
                 } else {
                     accountPlayer.setGamesLost(accountPlayer.getGamesLost() + 1);
                 }
-                // TODO: make it update the csv
+                accountPlayers.put(accountPlayer.getUserName(), accountPlayer);
+                accountPlayer.exportPlayer();
+
             }
         }
     }
@@ -125,11 +141,11 @@ public class Game {
         this.sc = sc;
     }
 
-    public static List<AccountPlayer> getAccountPlayers() {
+    public static Map<String, AccountPlayer> getAccountPlayers() {
         return accountPlayers;
     }
 
-    public static void setAccountPlayers(List<AccountPlayer> accountPlayers) {
+    public static void setAccountPlayers(Map<String, AccountPlayer> accountPlayers) {
         Game.accountPlayers = accountPlayers;
     }
 }
