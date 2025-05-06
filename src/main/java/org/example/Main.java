@@ -6,8 +6,6 @@ public class Main {
     public static void main(String[] args) {
         Game game = new Game();
 
-        AccountPlayer accountPlayer = new AccountPlayer("aba", game);
-
         game.start();
     }
 }

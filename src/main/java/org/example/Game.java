@@ -36,7 +36,7 @@ public class Game {
             players.get(i).draw(5);
             players.get(i).setActions(1);
             players.get(i).setBuys(1);
-            players.get(i).setMoney(1);
+            players.get(i).setMoney(0);
         }
         run();
     }

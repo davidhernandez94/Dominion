@@ -37,7 +37,7 @@ public abstract class Player implements Comparable<Player> {
             if (actions < 1) {
                 return;
             }
-            System.out.println("what card would you like to play? (press a letter and enter if you want to end action phase)");
+            System.out.println("what card would you like to play? (press any letter and enter if you want to end action phase)\nIf you want to see the description of a card, enter the card name with '?' at the end");
             List<Card> actionCards = new ArrayList<>();
             hand.forEach(card -> {
                 if (card instanceof Action) {
@@ -61,18 +61,19 @@ public abstract class Player implements Comparable<Player> {
      */
     public void BuyPhase(Game game) {
         System.out.println("\nBUY PHASE");
+        hand.forEach(card -> {
+            if (card instanceof Treasure treasure) {
+                money += treasure.pay(game, this);
+            }
+        });
         while (true) {
-            hand.forEach(card -> {
-                if (card instanceof Treasure) {
-                    money += ((Treasure) card).pay(game, this);
-                }
-            });
+            System.out.println("hand: " + hand);
             System.out.println("money: " + money);
             System.out.println("buys: " + buys);
             if (buys < 1) {
                 return;
             }
-            System.out.println("what card would you like to buy? (press a letter and enter if you want end buy phase)");
+            System.out.println("what card would you like to buy? (press any letter and enter if you want end buy phase)");
             List<Card> actionCards = new ArrayList<>();
             List<Card> treasureCards = new ArrayList<>();
             for (Queue<Card> list : game.supply.cards.values()) {
@@ -114,6 +115,7 @@ public abstract class Player implements Comparable<Player> {
     public Card inputCards(List<Card> cards) {
         List<String> strs = new ArrayList<>();
         cards.forEach(card -> strs.add(card.name));
+        cards.forEach(card -> strs.add(card.name + "?"));
         System.out.println("Your choices: " + strs + "\nYou choose: ");
         String result = game.sc.nextLine();
         while (!strs.contains(result)) {
@@ -122,6 +124,10 @@ public abstract class Player implements Comparable<Player> {
             }
             System.out.println("Incorrect input, try again: ");
             result = game.sc.nextLine();
+        }
+        if (result.contains("?")) {
+            System.out.println(cards.get(strs.indexOf(result) - cards.size()).description());
+            return inputCards(cards);
         }
         return cards.get(strs.indexOf(result));
     }
@@ -331,6 +337,7 @@ public abstract class Player implements Comparable<Player> {
         Collections.shuffle(discard);
         deck.addAll(discard);
         discard.clear();
+        System.out.println("(your discard has been shuffled into your deck)");
     }
 
     @Override

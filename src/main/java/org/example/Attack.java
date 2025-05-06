@@ -1,6 +1,8 @@
 package org.example;
 
-public interface Attackable {
+import java.util.List;
+
+public interface Attack {
 
     /**
      * attacks another player according to the card description

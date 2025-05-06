@@ -18,6 +18,6 @@ public abstract class BasicVictory extends Card implements Victory {
 
     @Override
     public String description() {
-        return "victory: " + points + "points";
+        return "victory: " + points + " point(s)";
     }
 }
