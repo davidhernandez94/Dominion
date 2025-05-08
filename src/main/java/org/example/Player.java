@@ -3,6 +3,7 @@ package org.example;
 import org.example.basicCards.Curse;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class Player implements Comparable<Player> {
     protected String name;
@@ -66,8 +67,8 @@ public abstract class Player implements Comparable<Player> {
                 money += treasure.pay(game, this);
             }
         });
+        System.out.println("hand: " + hand);
         while (true) {
-            System.out.println("hand: " + hand);
             System.out.println("money: " + money);
             System.out.println("buys: " + buys);
             if (buys < 1) {
@@ -113,6 +114,7 @@ public abstract class Player implements Comparable<Player> {
      * @return chosen card
      */
     public Card inputCards(List<Card> cards) {
+        cards = new HashSet<>(cards).stream().toList(); // so that no card repeats itself
         List<String> strs = new ArrayList<>();
         cards.forEach(card -> strs.add(card.name));
         cards.forEach(card -> strs.add(card.name + "?"));
@@ -433,5 +435,13 @@ public abstract class Player implements Comparable<Player> {
 
     public void setVictoryPoints(int victoryPoints) {
         this.victoryPoints = victoryPoints;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 }

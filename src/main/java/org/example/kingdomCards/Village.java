@@ -26,6 +26,6 @@ public class Village extends Card implements Action {
 
     @Override
     public String description() {
-        return "action:\n+1 card\n+2 actions";
+        return "action:\n+1 card\n+2 actions\ncost: 3";
     }
 }

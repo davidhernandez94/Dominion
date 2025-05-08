@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.kingdomCards.*;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -8,7 +10,7 @@ import java.util.*;
 public class Game {
     protected List<Player> players = new ArrayList<>();
     protected List<Card> trash = new ArrayList<>();
-    protected Supply supply = new Supply();
+    protected Supply supply;
     protected Scanner sc = new Scanner(System.in);
     private static Map<String, AccountPlayer> accountPlayers = AccountPlayer.getAccounts();
 
@@ -19,6 +21,18 @@ public class Game {
      * gives each player their starting deck
      */
     public void start() {
+        List<Card> kingdomCards = new ArrayList<>();
+        kingdomCards.add(new Festival());
+        kingdomCards.add(new Laboratory());
+        kingdomCards.add(new Market());
+        kingdomCards.add(new Smithy());
+        kingdomCards.add(new Village());
+
+        // TODO try these three:
+        kingdomCards.add(new Bandit());
+        kingdomCards.add(new ThroneRoom());
+        kingdomCards.add(new Witch());
+        supply = new Supply(kingdomCards);
         System.out.println("how many players? (1-6)");
         int numOfPlayers = sc.nextInt();
         sc.nextLine();
@@ -28,9 +42,26 @@ public class Game {
             sc.nextLine();
         }
         for (int i = 0; i < numOfPlayers; i++) {
-                    System.out.println("player " + (i + 1) + "'s name: ");
+            System.out.println("player " + (i + 1) + ", do you want to sign in, create an account, or play as a guest? (a/b/c)");
+            String hasAccount = sc.nextLine();
+            while (!hasAccount.matches("^[abc]$")) {
+                System.out.println("invalid, you must type a, b, or c");
+                hasAccount = sc.nextLine();
+            }
+            System.out.println("player " + (i + 1) + "'s name: ");
             String name = sc.nextLine();
-            players.add(new GuestPlayer(name, this));
+            Player player;
+            if (hasAccount.equals("a")) {
+                player = AccountPlayer.login();
+                player.setName(name);
+                player.setGame(this);
+            } else if (hasAccount.equals("b")) {
+                player = new AccountPlayer(name, this, AccountPlayer.makeUsername(), AccountPlayer.makePassword(), 0, 0);
+                ((AccountPlayer) player).exportPlayer();
+            } else {
+                player = new GuestPlayer(name, this);
+            }
+            players.add(player);
             players.get(i).gainToDiscard(7, "copper", supply);
             players.get(i).gainToDiscard(3, "estate", supply);
             players.get(i).draw(5);

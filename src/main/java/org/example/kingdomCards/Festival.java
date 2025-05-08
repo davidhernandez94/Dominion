@@ -27,6 +27,6 @@ public class Festival extends Card implements Action {
 
     @Override
     public String description() {
-        return "action:\n+2 actions\n+1 buy\n+2$";
+        return "action:\n+2 actions\n+1 buy\n+2$\ncost: 5";
     }
 }

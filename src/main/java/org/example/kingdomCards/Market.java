@@ -28,6 +28,6 @@ public class Market extends Card implements Action {
 
     @Override
     public String description() {
-        return "action:\n+1 card\n+1 action\n+1 buy\n+1 buy";
+        return "action:\n+1 card\n+1 action\n+1$\n+1 buy\ncost: 5";
     }
 }

@@ -11,7 +11,7 @@ public class Curse extends Card {
 
     @Override
     public String description() {
-        return "curse: -1 point";
+        return "curse: -1 point\ncost: 0";
     }
 
     @Override

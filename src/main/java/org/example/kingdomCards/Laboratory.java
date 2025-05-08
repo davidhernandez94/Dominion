@@ -26,6 +26,6 @@ public class Laboratory extends Card implements Action {
 
     @Override
     public String description() {
-        return "action:\n+2 cards\n+1 action";
+        return "action:\n+2 cards\n+1 action\ncost: 5";
     }
 }

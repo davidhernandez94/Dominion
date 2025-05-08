@@ -36,11 +36,10 @@ public class AccountPlayer extends Player {
     /**
      * allows account player to log in to their account through the terminal by reading the accounts.csv file.
      */
-    public void login() {
+    public static AccountPlayer login() {
         Scanner sc = new Scanner(System.in);
-        File file = new File("src/main/resources/accounts.csv");
         Map<String, AccountPlayer> accounts = getAccounts();
-        System.out.println("enter username: ");
+        System.out.println("enter username:");
         String username = sc.nextLine();
         while (!accounts.containsKey(username)) {
             System.out.println("username does not exist, try again: ");
@@ -52,6 +51,7 @@ public class AccountPlayer extends Player {
             System.out.println("incorrect password, try again: ");
             password = sc.nextLine();
         }
+        return accounts.get(username);
     }
 
     /**
@@ -59,7 +59,7 @@ public class AccountPlayer extends Player {
      * username must contain only letters and numbers and must be at least 8 characters long
      * @return new username
      */
-    public String makeUsername() {
+    public static String makeUsername() {
         Scanner sc = new Scanner(System.in);
         System.out.println("enter your new username: (must contain only letters and numbers, no spaces, at least 8 characters) ");
         String username = sc.nextLine();
@@ -79,7 +79,7 @@ public class AccountPlayer extends Player {
      * password must contain only letters and numbers and must be at least 8 characters long
      * @return new password
      */
-    public String makePassword() {
+    public static String makePassword() {
         Scanner sc = new Scanner(System.in);
         System.out.println("enter your new password: (must contain only letters and numbers, no spaces, at least 8 characters) ");
         String password = sc.nextLine();

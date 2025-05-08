@@ -18,6 +18,6 @@ public abstract class BasicTreasure extends Card implements Treasure {
 
     @Override
     public String description() {
-        return "treasure: " + money + "$";
+        return "treasure: " + money + "$\ncost: " + cost;
     }
 }
