@@ -26,6 +26,13 @@ public class ThroneRoom extends Card implements Action {
             }
         }
         Action card = (Action) player.inputCards(actionCards);
+        if (card == null) {
+            return;
+        }
+        System.out.println("\nfirst time:");
+        player.getDiscard().add((Card) card);
+        System.out.println("\nsecond time");
+        player.getHand().remove((Card) card);
         card.play(game, player);
         card.play(game, player);
     }

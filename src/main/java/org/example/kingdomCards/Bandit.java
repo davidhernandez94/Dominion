@@ -21,34 +21,36 @@ public class Bandit extends Card implements Action, Attack {
     @Override
     public void attack(Game game, Player player) {
         for (Player opponent : game.getPlayers()) {
-            List<Card> topTwo = opponent.reveal(2);
-            System.out.println("top two cards of " + opponent.getName() + "'s deck: " + topTwo);
-            topTwo = topTwo.stream()
-                    .filter(card -> (card instanceof Treasure && !(card instanceof Copper)))
-                    .toList();
-            if (topTwo.isEmpty()) {
-                System.out.println("discarded both");
-                opponent.getDiscard().add(opponent.getDeck().removeFirst());
-                opponent.getDiscard().add(opponent.getDeck().removeFirst());
-            } else if (topTwo.size() == 1) {
-                System.out.println("trashed " + topTwo.getFirst().getName());
-                game.getTrash().add(topTwo.getFirst());
-                if (opponent.getDeck().getFirst() instanceof Treasure && !(opponent.getDeck().getFirst() instanceof Copper)) {
-                    game.getTrash().add(opponent.getDeck().removeFirst());
+            if (!opponent.equals(player)) {
+                List<Card> topTwo = opponent.reveal(2);
+                System.out.println("top two cards of " + opponent.getName() + "'s deck: " + topTwo);
+                topTwo = topTwo.stream()
+                        .filter(card -> (card instanceof Treasure && !(card instanceof Copper)))
+                        .toList();
+                if (topTwo.isEmpty()) {
+                    System.out.println("discarded both");
                     opponent.getDiscard().add(opponent.getDeck().removeFirst());
+                    opponent.getDiscard().add(opponent.getDeck().removeFirst());
+                } else if (topTwo.size() == 1) {
+                    System.out.println("trashed " + topTwo.getFirst().getName());
+                    game.getTrash().add(topTwo.getFirst());
+                    if (opponent.getDeck().getFirst() instanceof Treasure && !(opponent.getDeck().getFirst() instanceof Copper)) {
+                        game.getTrash().add(opponent.getDeck().removeFirst());
+                        opponent.getDiscard().add(opponent.getDeck().removeFirst());
+                    } else {
+                        opponent.getDiscard().add(opponent.getDeck().removeFirst());
+                        game.getTrash().add(opponent.getDeck().removeFirst());
+                    }
                 } else {
-                    opponent.getDiscard().add(opponent.getDeck().removeFirst());
-                    game.getTrash().add(opponent.getDeck().removeFirst());
-                }
-            } else {
-                System.out.println(opponent.getName() + ", which card do you want to trash?");
-                Card choice = opponent.inputCards(topTwo);
-                if ((opponent.getDeck().getFirst().equals(choice))) {
-                    game.getTrash().add(opponent.getDeck().removeFirst());
-                    opponent.getDiscard().add(opponent.getDeck().removeFirst());
-                } else {
-                    opponent.getDiscard().add(opponent.getDeck().removeFirst());
-                    game.getTrash().add(opponent.getDeck().removeFirst());
+                    System.out.println(opponent.getName() + ", which card do you want to trash?");
+                    Card choice = opponent.inputCards(topTwo);
+                    if ((opponent.getDeck().getFirst().equals(choice))) {
+                        game.getTrash().add(opponent.getDeck().removeFirst());
+                        opponent.getDiscard().add(opponent.getDeck().removeFirst());
+                    } else {
+                        opponent.getDiscard().add(opponent.getDeck().removeFirst());
+                        game.getTrash().add(opponent.getDeck().removeFirst());
+                    }
                 }
             }
         }
@@ -61,6 +63,6 @@ public class Bandit extends Card implements Action, Attack {
 
     @Override
     public Card copy() {
-        return null;
+        return new Bandit();
     }
 }

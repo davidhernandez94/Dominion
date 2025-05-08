@@ -6,5 +6,6 @@ Users play against each other in a *pass and play* format, so that players can b
 ##### *https://www.riograndegames.com/wp-content/uploads/2016/09/Dominion2nd.pdf*
 ### Expected Output
 The user is able to play with commands directly into the terminal of the project. All output of the game are also in the terminal, using pure text to communicate with the program. 
-### Class Diagram
+### Old Class Diagram from deliverable 1:
 ![class diagram](https://github.com/user-attachments/assets/6ba90b89-5b47-423a-be6f-5cba2fc9d048)
+**to see new UML diagram, go to src/main/resources/newUML.png**

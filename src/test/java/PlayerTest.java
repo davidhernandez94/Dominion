@@ -171,54 +171,6 @@ public class PlayerTest {
     }
 
     @Test
-    void testCountActionCardsInHand() {
-        Player player = new GuestPlayer("");
-        List<Card> hand = new ArrayList<>();
-        hand.add(new Festival());
-        hand.add(new Curse());
-        hand.add(new Copper());
-        hand.add(new Duchy());
-        hand.add(new Laboratory());
-        hand.add(new Smithy());
-        hand.add(new Gold());
-        hand.add(new Village());
-        player.setHand(hand);
-        Assertions.assertEquals(4, player.countActionCardsInHand());
-    }
-
-    @Test
-    void testCountTreasuresInHand() {
-        Player player = new GuestPlayer("");
-        List<Card> hand = new ArrayList<>();
-        hand.add(new Festival());
-        hand.add(new Curse());
-        hand.add(new Copper());
-        hand.add(new Duchy());
-        hand.add(new Laboratory());
-        hand.add(new Smithy());
-        hand.add(new Gold());
-        hand.add(new Village());
-        player.setHand(hand);
-        Assertions.assertEquals(2, player.countTreasuresInHand());
-    }
-
-    @Test
-    void testCountVictoryCardsInHand() {
-        Player player = new GuestPlayer("");
-        List<Card> hand = new ArrayList<>();
-        hand.add(new Festival());
-        hand.add(new Curse());
-        hand.add(new Copper());
-        hand.add(new Duchy());
-        hand.add(new Laboratory());
-        hand.add(new Smithy());
-        hand.add(new Gold());
-        hand.add(new Village());
-        player.setHand(hand);
-        Assertions.assertEquals(1, player.countVictoryCardsInHand());
-    }
-
-    @Test
     void testGainToDiscard1() {
         Player actual = new GuestPlayer("a");
         Supply supply = new Supply();

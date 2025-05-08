@@ -3,7 +3,6 @@ package org.example;
 import org.example.basicCards.Curse;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public abstract class Player implements Comparable<Player> {
     protected String name;
@@ -45,6 +44,7 @@ public abstract class Player implements Comparable<Player> {
                     actionCards.add(card);
                 }
             });
+            actionCards.sort(new Card.CardComparator("")); // name alphabetically
             Action choice = (Action) inputCards(actionCards);
             if (choice == null) {
                 return;
@@ -114,7 +114,7 @@ public abstract class Player implements Comparable<Player> {
      * @return chosen card
      */
     public Card inputCards(List<Card> cards) {
-        cards = new HashSet<>(cards).stream().toList(); // so that no card repeats itself
+        cards = cards.stream().distinct().toList();
         List<String> strs = new ArrayList<>();
         cards.forEach(card -> strs.add(card.name));
         cards.forEach(card -> strs.add(card.name + "?"));
@@ -215,48 +215,6 @@ public abstract class Player implements Comparable<Player> {
     }
 
     /**
-     * counts how many action cards are in player's hand
-     * @return how many there are
-     */
-    public int countActionCardsInHand() {
-        int count = 0;
-        for (Card card : hand) {
-            if (card instanceof Action) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    /**
-     * counts how many treasure cards are in player's hand
-     * @return how many there are
-     */
-    public int countTreasuresInHand() {
-        int count = 0;
-        for (Card card : hand) {
-            if (card instanceof Treasure) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    /**
-     * counts how many victory cards are in player's hand
-     * @return how many there are
-     */
-    public int countVictoryCardsInHand() {
-        int count = 0;
-        for (Card card : hand) {
-            if (card instanceof Victory) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    /**
      * gains card from supply to player's discard
      * @param cardName name of added card
      * @param supply supply of the game
@@ -339,7 +297,7 @@ public abstract class Player implements Comparable<Player> {
         Collections.shuffle(discard);
         deck.addAll(discard);
         discard.clear();
-        System.out.println("(your discard has been shuffled into your deck)");
+        System.out.println("(" + this.name + "'s discard has been shuffled into their deck)");
     }
 
     @Override

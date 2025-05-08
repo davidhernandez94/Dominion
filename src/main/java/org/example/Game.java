@@ -22,20 +22,27 @@ public class Game {
      */
     public void start() {
         List<Card> kingdomCards = new ArrayList<>();
+        /*
+        usually, there are 10 types of kingdom cards per game,
+        but these are all the ones I coded so far.
+        in the original game, there are 26 different types
+         */
         kingdomCards.add(new Festival());
         kingdomCards.add(new Laboratory());
         kingdomCards.add(new Market());
         kingdomCards.add(new Smithy());
         kingdomCards.add(new Village());
-
-        // TODO try these three:
         kingdomCards.add(new Bandit());
         kingdomCards.add(new ThroneRoom());
         kingdomCards.add(new Witch());
         supply = new Supply(kingdomCards);
         System.out.println("how many players? (1-6)");
-        int numOfPlayers = sc.nextInt();
-        sc.nextLine();
+        String choice = sc.nextLine();
+        while (!choice.matches("^[2-6]$")) {
+            System.out.println("invalid, try again: ");
+            choice = sc.nextLine();
+        }
+        int numOfPlayers = Integer.parseInt(choice);
         while (numOfPlayers < 1 || numOfPlayers > 6) {
             System.out.println("incorrect");
             numOfPlayers = sc.nextInt();

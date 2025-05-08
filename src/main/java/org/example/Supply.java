@@ -33,6 +33,7 @@ public class Supply {
         base.add(new Estate());
         base.add(new Duchy());
         base.add(new Province());
+        base.add(new Curse());
         startingCards.addAll(base);
 
         startingCards
