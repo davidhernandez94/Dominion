@@ -35,8 +35,10 @@ public class Game {
         kingdomCards.add(new Bandit());
         kingdomCards.add(new ThroneRoom());
         kingdomCards.add(new Witch());
+        kingdomCards.add(new Cellar());
+        kingdomCards.add(new Chapel());
         supply = new Supply(kingdomCards);
-        System.out.println("how many players? (1-6)");
+        System.out.println("how many players? (2-6)");
         String choice = sc.nextLine();
         while (!choice.matches("^[2-6]$")) {
             System.out.println("invalid, try again: ");

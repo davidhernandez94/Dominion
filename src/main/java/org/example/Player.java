@@ -302,7 +302,7 @@ public abstract class Player implements Comparable<Player> {
 
     @Override
     public int compareTo(Player o) {
-        return this.victoryPoints - o.victoryPoints;
+        return o.victoryPoints - this.victoryPoints;
     }
 
     @Override
